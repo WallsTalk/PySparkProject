@@ -1,11 +1,13 @@
 from pyspark.sql.types import *
 from pyspark.sql import Row
 
+#taking all the file names from directory with all the csv files
 csv_names = []
 csv_names = os.listdir('/users/steponas/Documents/Projects/DataEnginiering/csvData/')
 print(csv_names)
 
 
+#creating list of headers and dictionary with key(unique_header):csv_data 
 csv_headers = []
 csv_data = {}
 for item in csv_names:
@@ -22,11 +24,25 @@ for item in csv_names:
 		csv_data[str(temp.first())] = temp
 
 
-for key, val in csv_data:
-	print(key)
-	print(val)
+#making a list of dataframes for eatch unique key(unique_header):csv_data 
+dfList = []
+for key in csv_data:
+	count = 0
+	header = key.split(",")
+	header_dict = {}
+	print(len(header))
+	for item in header:
+		print(item)
+		if header.index(item) == 0:
+ 			header_dict[item] = header.index(item)
+ 		else:
+ 			header_dict[item] = header.index(item)
+	dfList.append(csv_data[key].map(lambda p: Row(**header_dict)).toDF())
+	count += 1
 
-print(csv_headers)
+
+
+df_csv = csv_data.map(lambda p: Row(EmployeeID = int(p[0]), FirstName = p[1], Title=p[2], State=p[3], Laptop=p[4])).toDF()
 
 
 
