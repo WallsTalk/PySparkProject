@@ -31,13 +31,13 @@ for key in csv_data:
 	header = key.split(",")
 	header_dict = {}
 	print(len(header))
-	p = []
+	#p = []
 	for item in header:
 		print(item)
 		if header.index(item) == 0:
-			header_dict[item] = int(p)
+			header_dict[item] = int(1)
 		else:
-			header_dict[item] = p
+			header_dict[item] = 1
 	dfList.append(csv_data[key].map(lambda p: Row(**header_dict)).toDF())
 	count += 1
 
