@@ -31,18 +31,19 @@ for key in csv_data:
 	header = key.split(",")
 	header_dict = {}
 	print(len(header))
+	p = []
 	for item in header:
 		print(item)
 		if header.index(item) == 0:
- 			header_dict[item] = header.index(item)
- 		else:
- 			header_dict[item] = header.index(item)
+			header_dict[item] = int(p)
+		else:
+			header_dict[item] = p
 	dfList.append(csv_data[key].map(lambda p: Row(**header_dict)).toDF())
 	count += 1
 
 
 
-df_csv = csv_data.map(lambda p: Row(EmployeeID = int(p[0]), FirstName = p[1], Title=p[2], State=p[3], Laptop=p[4])).toDF()
+
 
 
 
