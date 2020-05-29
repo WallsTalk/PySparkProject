@@ -1,5 +1,7 @@
 from pyspark.sql.types import *
-from pyspark.sql import Row
+from pyspark.sql import *
+import re
+
 
 #taking all the file names from directory with all the csv files
 csv_names = []
@@ -23,24 +25,14 @@ for item in csv_names:
 		csv_headers.append(str(temp.first()))
 		csv_data[str(temp.first())] = temp
 
-
 #making a list of dataframes for eatch unique key(unique_header):csv_data 
 dfList = []
 for key in csv_data:
 	count = 0
-	header = key.split(",")
-	header_dict = {}
-	print(len(header))
-	#p = []
-	for item in header:
-		print(item)
-		if header.index(item) == 0:
-			header_dict[item] = int(1)
-		else:
-			header_dict[item] = 1
-	dfList.append(csv_data[key].map(lambda p: Row(**header_dict)).toDF())
+	header = re.sub("[][]", '', key).split(",")  
+	header_row = Row(*header)
+	dfList.append(csv_data[key].map(lambda p: header_row(*p[:len(header)])).toDF())
 	count += 1
-
 
 
 
