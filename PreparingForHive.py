@@ -2,7 +2,6 @@ from pyspark.sql.types import *
 from pyspark.sql import *
 import re
 
-
 #taking all the file names from directory with all the csv files
 csv_names = []
 csv_names = os.listdir('/users/steponas/Documents/Projects/DataEnginiering/csvData/')
@@ -14,16 +13,22 @@ csv_headers = []
 csv_data = {}
 for item in csv_names:
 	csv_name = sc.textFile("/users/steponas/Documents/Projects/DataEnginiering/csvData/" + item)
-	try:
-		temp = csv_name.map(lambda p: p.split(","))
+	try: temp = csv_name.map(lambda p: p.split(","))	
 	except:
+		print("couldnt format the" + str(csv_name))
 		continue
-	if str(temp.first()) in csv_headers:
-			csv_data[str(temp.first())] = csv_data[str(temp.first())].union(temp)
-			temp = temp.filter(lambda p:p != header)
+	try: str(temp.first())	
+	except:
+		print("couldnt cast to string " + str(csv_name))
+		continue
+	header = temp.first()
+	if str(header) in csv_headers:
+		temp = temp.filter(lambda p:p != header)
+		csv_data[str(header)] = csv_data[str(header)].union(temp)
 	else:
 		csv_headers.append(str(temp.first()))
-		csv_data[str(temp.first())] = temp
+		temp = temp.filter(lambda p:p != header)
+		csv_data[str(header)] = temp
 
 #making a list of dataframes for eatch unique key(unique_header):csv_data 
 dfList = []
