@@ -1,6 +1,8 @@
+
 from pyspark.sql.types import *
 from pyspark.sql import *
 import re
+
 
 #taking all the file names from directory with all the csv files
 csv_names = []
@@ -9,6 +11,7 @@ print(csv_names)
 
 
 #creating list of headers and dictionary with key(unique_header):csv_data 
+#!!!  should clear these out when using sqlContext (contains invalid character(s) among " ,;{}()\n\t=")
 csv_headers = []
 csv_data = {}
 for item in csv_names:
@@ -34,13 +37,14 @@ for item in csv_names:
 dfList = []
 for key in csv_data:
 	count = 0
-	header = re.sub("[][]", '', key).split(",")  
+	header = re.sub("[][ ]", '', key).split(",")  
 	header_row = Row(*header)
 	dfList.append(csv_data[key].map(lambda p: header_row(*p[:len(header)])).toDF())
 	count += 1
 
-
-
+#creating temporary table out of my dataframe and selecting all data from temp table to my actual table
+dfList[0].createOrReplaceTempView("mytempTable") 
+sqlContext.sql("create table mytable as select * from mytempTable");
 
 
 
