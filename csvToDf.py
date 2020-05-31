@@ -45,10 +45,6 @@ for key in csv_data:
 	dfList.append(csv_data[key].map(lambda p: header_row(*p[:len(header)])).toDF())
 	count += 1
 
-'''
-for frame in dfList:
-	dfList[dfList.index(frame)].coalesce(1).write.option("header","true").option("sep",",").mode(
-		"overwrite").csv("/users/steponas/Documents/Projects/DataEnginiering/output/")
-'''
+
 
 
