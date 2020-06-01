@@ -6,3 +6,11 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
 LOCATION 'hdfs://sandbox-hdp.hortonworks.com:8020/user/hive/csv_data/green_tripdata';
+
+
+CREATE EXTERNAL TABLE IF NOT EXISTS taxidata.yellow
+(VendorID int,tpep_pickup_datetime string,tpep_dropoff_datetime string,passenger_count int,trip_distance float,RatecodeID int,store_and_fwd_flag string,PULocationID int ,DOLocationID int,payment_type float,fare_amount float,extra float,mta_tax float,tip_amount float,tolls_amount float,improvement_surcharge float,total_amount float,congestion_surcharge float)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+STORED AS TEXTFILE
+LOCATION 'hdfs://sandbox-hdp.hortonworks.com:8020/user/hive/csv_data/yellow_tripdata';
